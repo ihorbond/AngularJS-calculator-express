@@ -5,7 +5,7 @@ const logger       = require('morgan');
 // const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const session      = require('express-session');
-// const layouts      = require('express-ejs-layouts');
+const layouts      = require('express-ejs-layouts');
 // const mongoose     = require('mongoose');
 
 
@@ -13,77 +13,75 @@ const session      = require('express-session');
 
 const app = express();
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 // default value for title local
 app.locals.title = 'Express Calculator';
-app.sessionData  = req.session;
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-// app.use(layouts);
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(layouts);
 app.use(session({
+  // memory: 0,
   secret: 'secret-calculator',
   //do not force resave if no changes were made
   resave: false,
+  saveUninitialized: false,
   cookie: {
     //https only y'all
-    secure: true
+    maxAge: 60000,
+    // secure: true
   }
 }));
 
+//show memory
+app.get('/memory', (req, res, next) => {
+  res.json(req.session.memory);
+});
+
 //add to memory
 app.post('/mplus', (req, res, next) => {
-  console.log(sessionData);
-  //  let sessionData = req.session;
+     let sessionData = req.session;
    if (!sessionData.memory) {
-     sessionData.memory = req.body.data;
+     sessionData.memory = parseFloat(req.body.data);
      res.json({message: `Saved ${req.body.data}`});
    }
    else {
-     sessionData.memory += req.body.data;
+     sessionData.memory += parseFloat(req.body.data);
      res.json({message: `Added ${req.body.data}`});
    }
 });
 
 //substract from memory
 app.patch('/mminus', (req, res, next) => {
-  console.log(sessionData);
-  // let sessionData = req.session;
+  let sessionData = req.session;
   if (!sessionData.memory) {
     sessionData.memory = 0;
   }
-  sessionData.memory -= req.body.data;
-  res.json({message: `Substracted${req.body.data}`});
-});
-
-//show memory
-app.get('/memory', (req, res, next) => {
-  console.log(sessionData);
-  if (!sessionData.memory) {
-    res.json(0);
-  }
-  res.json(sessionData.memory);
+  sessionData.memory -= parseFloat(req.body.data);
+  // console.log(sessionData.memory);
+  res.json({message: `Substracted ${req.body.data}`});
 });
 
 //erase data stored in memory
 app.delete('/mc', (req, res, next) => {
-  console.log(sessionData);
+    let sessionData = req.session;
   if(sessionData.memory) {
     sessionData.memory = 0;
   }
+  // console.log(sessionData.memory);
   res.json({message: "Erased"});
+
 });
 
 //send to index.html if no route matched
 app.use((req, res, next) => {
-  res.sendfile(__dirname + 'index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 // catch 404 and forward to error handler

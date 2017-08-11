@@ -6,10 +6,7 @@ const cors         = require('cors');
 const bodyParser   = require('body-parser');
 const session      = require('express-session');
 const layouts      = require('express-ejs-layouts');
-// const mongoose     = require('mongoose');
 
-
-// mongoose.connect('mongodb://localhost/angularjs-calculator-express');
 
 const app = express();
 app.use(cors({
@@ -29,7 +26,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/app')));
 app.use(layouts);
 app.use(session({
   secret: 'secret-calculator',
@@ -37,9 +34,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    //https only y'all
     maxAge: 60000,
-    // secure: true
   }
 }));
 
@@ -67,7 +62,7 @@ app.post('/mplus', (req, res, next) => {
 //substract from memory
 app.patch('/mminus', (req, res, next) => {
 
-  if (req.session.memory) {
+  if (!req.session.memory) {
     req.session.memory = 0;
   }
   req.session.memory -= parseFloat(req.body.data);

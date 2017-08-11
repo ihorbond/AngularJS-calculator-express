@@ -1,0 +1,65 @@
+$green: rgb(7, 131, 8);
+
+body {
+  background-image: url("../images/background.jpg");
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  width: 2em;
+  height: 2em;
+  font-size: 20px;
+  border: 0.5px solid rgb(81, 82, 84);
+  background: rgb(214, 150, 6);
+  color: white;
+}
+
+#message {
+  margin: 0;
+  background: white;
+  color: $green;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+#calc-body {
+  display: inline-block;
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  // width: 100%;
+  border: 3px solid $green;
+  box-shadow: 0 0 35px 5px $green;
+
+  #display {
+    font-size: 2em;
+    text-align: right;
+    border: none;
+    background: black;
+    color: white;
+  }
+
+  #operations {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    width: 120px;
+
+    #operationAC {
+      width: 4em;
+    }
+  }
+
+  #num-pad {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    width: 120px;
+
+    #num0 {
+      width: 4em;
+    }
+  }
+}

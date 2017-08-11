@@ -1,0 +1,17 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "Simple Calculator",
+  "repository": "https://github.com/ihorbond/AngularJS-calculator",
+  "main": "app.module.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server ./app -a localhost -p 8000 -c-1"
+  },
+  "author": "Ihor Bodnarchuk",
+  "license": "ISC",
+  "dependencies": {
+    "bower": "^1.8.0",
+    "http-server": "^0.10.0"
+  }
+}

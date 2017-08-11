@@ -58,11 +58,11 @@ angular.module("calculator")
              switch (value) {
 
                case "mc":
-               document.getElementById("operationmr").className = "";
                $http({
                method: 'DELETE',
                url: 'http://localhost:3000/mc'
              }).then(res => {
+               document.getElementById("operationmr").className = "";
                scope.message = res.data;
                scope.displayValue = "0";
              }, res => {
@@ -83,13 +83,13 @@ angular.module("calculator")
                break;
 
                case "m+":
-               document.getElementById("operationmr").className = "active";
                $http({
                method: 'POST',
                url: 'http://localhost:3000/mplus',
                data: { data: scope.displayValue },
                withCredentials: true
              }).then(res => {
+                 document.getElementById("operationmr").className = "active";
                  scope.message = res.data;
                }, res => {
                 scope.message = res.data;
@@ -97,13 +97,13 @@ angular.module("calculator")
                break;
 
                case "m-":
-               document.getElementById("operationmr").className = "active";
                $http({
                method: 'PATCH',
                url: 'http://localhost:3000/mminus',
                data: { data: scope.displayValue },
                withCredentials: true
              }).then(res => {
+                 document.getElementById("operationmr").className = "active";
                  scope.message = res.data;
                }, res => {
                 scope.message = res.data;

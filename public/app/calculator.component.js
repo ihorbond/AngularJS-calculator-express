@@ -58,6 +58,7 @@ angular.module("calculator")
              switch (value) {
 
                case "mc":
+               document.getElementById("operationmr").className = "";
                $http({
                method: 'DELETE',
                url: 'http://localhost:3000/mc'
@@ -82,7 +83,7 @@ angular.module("calculator")
                break;
 
                case "m+":
-
+               document.getElementById("operationmr").className = "active";
                $http({
                method: 'POST',
                url: 'http://localhost:3000/mplus',
@@ -96,6 +97,7 @@ angular.module("calculator")
                break;
 
                case "m-":
+               document.getElementById("operationmr").className = "active";
                $http({
                method: 'PATCH',
                url: 'http://localhost:3000/mminus',

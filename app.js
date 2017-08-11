@@ -2,18 +2,17 @@ const express      = require('express');
 const path         = require('path');
 const favicon      = require('serve-favicon');
 const logger       = require('morgan');
-const cors         = require('cors');
+// const cors         = require('cors');
 const bodyParser   = require('body-parser');
 const session      = require('express-session');
 const layouts      = require('express-ejs-layouts');
 
 
 const app = express();
-app.use(cors({
-  credentials: true,
-  // origin: [ 'http://127.0.0.1:8080' ]
-  origin: 'null'
-}));
+// app.use(cors({
+//   credentials: true,
+//   origin: 'null'
+// }));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -50,13 +49,10 @@ app.get('/memory', (req, res, next) => {
 app.post('/mplus', (req, res, next) => {
 
    if (!req.session.memory) {
-     req.session.memory = parseFloat(req.body.data);
-     res.json(`Saved ${req.body.data}`);
+     req.session.memory = 0;
    }
-   else {
-     req.session.memory += parseFloat(req.body.data);
-     res.json(`Added ${req.body.data}`);
-   }
+   req.session.memory = parseFloat(req.body.data);
+   res.json(`Added ${req.body.data} to memory`);
 });
 
 //substract from memory
@@ -67,7 +63,7 @@ app.patch('/mminus', (req, res, next) => {
   }
   req.session.memory -= parseFloat(req.body.data);
   // console.log(sessionData.memory);
-  res.json(`Substracted ${req.body.data}`);
+  res.json(`Substracted ${req.body.data} from memory`);
 });
 
 //erase data stored in memory

@@ -63,7 +63,7 @@ angular.module("calculator")
                url: 'http://localhost:3000/mc'
              }).then(res => {
                scope.message = res.data;
-
+               scope.displayValue = "0";
              }, res => {
                scope.message = res.data;
                });
@@ -82,6 +82,7 @@ angular.module("calculator")
                break;
 
                case "m+":
+
                $http({
                method: 'POST',
                url: 'http://localhost:3000/mplus',

@@ -2,7 +2,7 @@ const express      = require('express');
 const path         = require('path');
 const favicon      = require('serve-favicon');
 const logger       = require('morgan');
-// const cookieParser = require('cookie-parser');
+const cors         = require('cors');
 const bodyParser   = require('body-parser');
 const session      = require('express-session');
 const layouts      = require('express-ejs-layouts');
@@ -12,6 +12,11 @@ const layouts      = require('express-ejs-layouts');
 // mongoose.connect('mongodb://localhost/angularjs-calculator-express');
 
 const app = express();
+app.use(cors({
+  credentials: true,
+  // origin: [ 'http://127.0.0.1:8080' ]
+  origin: 'null'
+}));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -27,7 +32,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
 app.use(session({
-  // memory: 0,
   secret: 'secret-calculator',
   //do not force resave if no changes were made
   resave: false,
@@ -41,47 +45,48 @@ app.use(session({
 
 //show memory
 app.get('/memory', (req, res, next) => {
-  res.json(req.session.memory);
+  if (req.session.memory) {
+    res.json(req.session.memory);
+  }
+  res.json("0");
 });
 
 //add to memory
 app.post('/mplus', (req, res, next) => {
-     let sessionData = req.session;
-   if (!sessionData.memory) {
-     sessionData.memory = parseFloat(req.body.data);
-     res.json({message: `Saved ${req.body.data}`});
+
+   if (!req.session.memory) {
+     req.session.memory = parseFloat(req.body.data);
+     res.json(`Saved ${req.body.data}`);
    }
    else {
-     sessionData.memory += parseFloat(req.body.data);
-     res.json({message: `Added ${req.body.data}`});
+     req.session.memory += parseFloat(req.body.data);
+     res.json(`Added ${req.body.data}`);
    }
 });
 
 //substract from memory
 app.patch('/mminus', (req, res, next) => {
-  let sessionData = req.session;
-  if (!sessionData.memory) {
-    sessionData.memory = 0;
+
+  if (req.session.memory) {
+    req.session.memory = 0;
   }
-  sessionData.memory -= parseFloat(req.body.data);
+  req.session.memory -= parseFloat(req.body.data);
   // console.log(sessionData.memory);
-  res.json({message: `Substracted ${req.body.data}`});
+  res.json(`Substracted ${req.body.data}`);
 });
 
 //erase data stored in memory
 app.delete('/mc', (req, res, next) => {
-    let sessionData = req.session;
-  if(sessionData.memory) {
-    sessionData.memory = 0;
+  if(req.session.memory) {
+    req.session.memory = 0;
   }
   // console.log(sessionData.memory);
-  res.json({message: "Erased"});
-
+  res.json("Erased");
 });
 
 //send to index.html if no route matched
 app.use((req, res, next) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/public/app/index.html');
 });
 
 // catch 404 and forward to error handler
